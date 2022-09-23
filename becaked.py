@@ -8,9 +8,9 @@ import keras.backend as K
 from keras.optimizers import RMSprop, Adam, SGD
 from keras.callbacks import LearningRateScheduler, ModelCheckpoint, EarlyStopping
 import os
-from data_utils import *
-from utils import *
-from generator import *
+from .data_utils import *
+from .utils import *
+from .generator import *
 
 DAYS = 10
 

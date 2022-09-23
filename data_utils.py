@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 class DataLoader():
-    def __init__(self, folder="COVID-19/csse_covid_19_data/csse_covid_19_time_series/"):
+    def __init__(self, folder=os.path.dirname(os.path.abspath(__file__))+"/COVID-19/csse_covid_19_data/csse_covid_19_time_series/"):
         self.confirmed_obj = pd.read_csv(os.path.join(folder, "time_series_covid19_confirmed_global.csv"))
         self.deaths_obj = pd.read_csv(os.path.join(folder, "time_series_covid19_deaths_global.csv"))
         self.recovered_obj = pd.read_csv(os.path.join(folder, "time_series_covid19_recovered_global.csv"))
