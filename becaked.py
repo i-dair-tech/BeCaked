@@ -66,9 +66,8 @@ class BeCakedModel():
         self.initN = population
         self.day_lag = day_lag
         self.model = self.build_model(day_lag)
-
-        if os.path.exists("models/world_%d.h5"%day_lag):
-            self.load_weights("models/world_%d.h5"%day_lag)
+        if os.path.exists("BeCaked/models/world_%d.h5"%day_lag):
+            self.load_weights("BeCaked/models/world_%d.h5"%day_lag)
 
         self.model.summary()
         self.estimator_model = Model(inputs=self.model.input,
