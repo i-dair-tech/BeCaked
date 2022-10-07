@@ -63,6 +63,11 @@ def SIRD_layer(tensors):
     out = tf.stack([S, I, R, D], axis=-1)
     return out
 
+class DefaultCustomCallback(keras.callbacks.Callback):
+    def on_train_begin(self, logs=None):
+        keys = list(logs.keys())
+      
+
 def case_diff(tensor):
     return tf.subtract(tensor[:,1:], tensor[:,:-1])
 
@@ -108,7 +113,7 @@ class BeCakedModel():
 
         return model
 
-    def train(self, confirmed, recovered, deaths, epochs=10000, name="world"):
+    def train(self, confirmed, recovered, deaths, epochs=10000, name="world",customCallback=DefaultCustomCallback()):
         S = (self.initN - confirmed) * 100 / self.initN
         I = (confirmed - recovered - deaths) * 100 / self.initN
         R = (recovered) * 100 / self.initN
@@ -127,11 +132,11 @@ class BeCakedModel():
         optimizer = Adam(learning_rate=1e-6)
         checkpoint = ModelCheckpoint(os.path.join('./ckpt', 'ckpt_%s_%d_{epoch:06d}.h5'%(name, self.day_lag)), period=500)
         early_stop = EarlyStopping(monitor="loss", patience=100)
-
+        
         self.model.compile(optimizer=optimizer, loss="mean_squared_error", metrics=['mean_absolute_error'])
-        self.model.fit_generator(generator=data_generator, epochs=epochs, callbacks=[lr_schedule, checkpoint, early_stop])
-
-        self.model.save_weights("%s_%d.h5"%(name, self.day_lag))
+        self.model.fit_generator(generator=data_generator, epochs=epochs, callbacks=[lr_schedule, checkpoint, early_stop,customCallback])
+        
+        self.model.save_weights("models/%s_%d.h5"%(name, self.day_lag))
 
     def evaluate(self, confirmed, recovered, deaths):
         S = (self.initN - confirmed) * 100 / self.initN
